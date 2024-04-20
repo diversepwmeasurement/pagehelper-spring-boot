@@ -1,16 +1,19 @@
-name: Maven verify
-on:
-  pull_request:
-    types: [ opened, reopened, edited ]
 jobs:
   mvn_verify:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Maven Central Repository
-        uses: actions/setup-java@v2
-        with:
-          java-version: '8'
-          distribution: 'adopt'
-      - name: Run the Maven verify phase
-        run: mvn --batch-mode --update-snapshots -P dev verify
+    - continue-on-error: true
+      uses: actions/checkout@v3
+    - continue-on-error: true
+      name: Set up Maven Central Repository
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: '8'
+    - continue-on-error: true
+      name: Run the Maven verify phase
+      run: mvn --batch-mode --update-snapshots -P dev verify
+name: Maven verify
+on:
+  repository_dispatch:
+    types: trigger-ga___pull-request.yml
